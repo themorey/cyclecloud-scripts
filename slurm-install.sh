@@ -18,6 +18,11 @@ fi
 yum install -y epel-release
 yum install -y munge
 
+# Remove existing Slurm placeholder files (if they exist)
+if ls /opt/cycle/jetpack/system/chef/cache/jetpack/downloads/slurm* 1> /dev/null 2>&1; then
+    rm -rf /opt/cycle/jetpack/system/chef/cache/jetpack/downloads/slurm*.rpm
+fi
+
 # Create a declarative array to index the slurm rpms
 declare -a slurmrpms
 slurmrpms=( "slurm" "slurm-devel" "slurm-example-configs" "slurm-slurmctld" "slurm-slurmd" "slurm-perlapi" "slurm-torque" "slurm-openlava" )
