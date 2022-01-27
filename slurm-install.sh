@@ -16,7 +16,7 @@ if ! grep -q "munge" /etc/passwd; then
 fi
 
 yum install -y epel-release
-yum install -y munge
+yum install -y munge nfs-utils
 
 # Remove existing Slurm placeholder files (if they exist)
 if ls /opt/cycle/jetpack/system/chef/cache/jetpack/downloads/slurm* 1> /dev/null 2>&1; then
