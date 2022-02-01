@@ -30,7 +30,7 @@ slurmrpms=( "slurm" "slurm-devel" "slurm-example-configs" "slurm-slurmctld" "slu
 # Loop through the RPMs in the array to download and install each
 for rpm in "${slurmrpms[@]}"; do
     # Download RPM from CycleCloud Slurm repo
-    wget -o /tmp/${rpm}-${VER}.el7.x86_64.rpm  https://github.com/Azure/cyclecloud-slurm/releases/download/${ccSlurmVer}/${rpm}-${VER}.el7.x86_64.rpm
+    wget -O /tmp/${rpm}-${VER}.el7.x86_64.rpm  https://github.com/Azure/cyclecloud-slurm/releases/download/${ccSlurmVer}/${rpm}-${VER}.el7.x86_64.rpm
     
     # install RPM from CycleCloud Slurm repo
     yum install -y /tmp/${rpm}-${VER}.el7.x86_64.rpm
