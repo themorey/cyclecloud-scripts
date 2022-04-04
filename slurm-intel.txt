@@ -303,7 +303,7 @@ Order = 15
         [[[parameter NFSSchedExportPath]]]
         Label = Shared Export Path
         Description = The path exported by the file system
-        DefaultValue = /shared
+        DefaultValue = /sched
 #        Conditions.Hidden := NFSSchedDisable != "true"
 
         [[[parameter NFSSchedMountOptions]]]
