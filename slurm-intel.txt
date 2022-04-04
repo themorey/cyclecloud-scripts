@@ -90,7 +90,7 @@ Autoscale = $Autoscale
     # "-")}
     
         [[[configuration]]]
-        cyclecloud.mounts.nfs_sched.disabled = true
+        cyclecloud.mounts.nfs_sched.disabled = false
         cyclecloud.mounts.nfs_shared.disabled = ${NFSType != "External"}
 
 
