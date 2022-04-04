@@ -50,7 +50,7 @@ Autoscale = $Autoscale
 
         [[[volume boot]]]
         Azure.Encryption.Type = EncryptionAtRestWithCustomerKey
-	      Azure.Encryption.DiskEncryptionSetId = $diskEncryptionSetId
+	Azure.Encryption.DiskEncryptionSetId = $diskEncryptionSetId
 
         [[[configuration cyclecloud.mounts.nfs_shared]]]
         type = nfs
