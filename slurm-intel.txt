@@ -48,6 +48,10 @@ Autoscale = $Autoscale
         [[[cluster-init cyclecloud/slurm:default]]]
         Optional = true
 
+        [[[volume boot]]]
+        Azure.Encryption.Type = EncryptionAtRestWithCustomerKey
+	Azure.Encryption.DiskEncryptionSetId = $diskEncryptionSetId
+
         [[[configuration cyclecloud.mounts.nfs_shared]]]
         type = nfs
         mountpoint = /shared
@@ -205,6 +209,11 @@ Order = 10
         Description = The VM type for HTC execute nodes
         ParameterType = Cloud.MachineType
         DefaultValue = Standard_F2s_v2
+	
+	[[[parameter diskEncryptionSetId]]]
+	Label = ADE ID
+        Description = The ResourceID of the Disk Encryption Set
+        ParameterType = String
 
 
     [[parameters Auto-Scaling]]
