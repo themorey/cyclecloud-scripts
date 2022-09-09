@@ -1,0 +1,60 @@
+#####################################################################################
+df -h:
+Filesystem         Size  Used Avail Use% Mounted on
+devtmpfs           221G     0  221G   0% /dev
+tmpfs              221G     0  221G   0% /dev/shm
+tmpfs              221G   18M  221G   1% /run
+tmpfs              221G     0  221G   0% /sys/fs/cgroup
+/dev/sda2           30G   20G  9.6G  67% /
+/dev/sda1          494M  119M  375M  25% /boot
+/dev/sda15         495M   12M  484M   3% /boot/efi
+/dev/sdb1          473G   73M  449G   1% /mnt/resource
+/dev/md10          1.8T   69M  1.8T   1% /mnt/nvme
+10.40.0.5:/sched    30G   33M   30G   1% /sched
+10.40.0.5:/shared  100G   34M  100G   1% /shared
+tmpfs               45G     0   45G   0% /run/user/20002
+beegfs_ondemand    3.5T  103M  3.5T   1% /mnt/beeond
+#####################################################################################
+#####################################################################################
+
+beegfs-ctl --mount=/mnt/beeond --listnodes --nodetype=storage:
+jm-hpc-pg0-1 [ID: 1]
+jm-hpc-pg0-3 [ID: 2]
+#####################################################################################
+#####################################################################################
+
+beegfs-ctl --mount=/mnt/beeond --listnodes --nodetype=metadata:
+jm-hpc-pg0-1 [ID: 1]
+#####################################################################################
+#####################################################################################
+
+beegfs-ctl --mount=/mnt/beeond --getentryinfo:
+Entry type: directory
+EntryID: root
+Metadata node: jm-hpc-pg0-1 [ID: 1]
+Stripe pattern details:
++ Type: RAID0
++ Chunksize: 512K
++ Number of storage targets: desired: 4
++ Storage Pool: 1 (Default)
+#####################################################################################
+#####################################################################################
+
+beegfs-net:
+
+mgmt_nodes
+=============
+jm-hpc-pg0-1 [ID: 1]
+   Connections: TCP: 1 (172.17.0.1:9008);
+
+meta_nodes
+=============
+jm-hpc-pg0-1 [ID: 1]
+   Connections: RDMA: 1 (172.16.1.66:9005);
+
+storage_nodes
+=============
+jm-hpc-pg0-1 [ID: 1]
+   Connections: RDMA: 1 (172.16.1.66:9003);
+jm-hpc-pg0-3 [ID: 2]
+   Connections: RDMA: 1 (172.16.1.76:9003);
