@@ -35,7 +35,7 @@ fi
 
 # Create a declarative array to index the slurm rpms
 declare -a slurmrpms
-slurmrpms=( "slurm" "slurm-devel" "slurm-example-configs" "slurm-slurmctld" "slurm-slurmd" "slurm-perlapi" "slurm-torque" "slurm-openlava" )
+slurmrpms=( "slurm" "slurm-devel" "slurm-example-configs" "slurm-slurmctld" "slurm-slurmd" "slurm-perlapi" "slurm-torque" "slurm-openlava" "slurm-libpmi" )
 
 # Loop through the RPMs in the array to download and install each
 for rpm in "${slurmrpms[@]}"; do
