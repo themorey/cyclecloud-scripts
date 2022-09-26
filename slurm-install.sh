@@ -3,7 +3,7 @@
 set -x
 
 export VER=20.11.7-1
-export ccSlurmVer=2.4.7
+export ccSlurmVer=2.6.5
 
 # Make placeholder dir for CycleCloud
 mkdir -p /opt/cycle/jetpack/system/chef/cache/jetpack/downloads
@@ -26,7 +26,7 @@ if ! grep -q "munge" /etc/passwd; then
 fi
 
 yum install -y epel-release
-yum install -y munge nfs-utils
+yum install -y munge nfs-utils libevent-devel
 
 # Remove existing Slurm placeholder files (if they exist)
 if ls /opt/cycle/jetpack/system/chef/cache/jetpack/downloads/slurm* 1> /dev/null 2>&1; then
@@ -54,3 +54,13 @@ wget -O /usr/lib64/slurm/job_submit_cyclecloud.so  https://github.com/Azure/cycl
 touch /etc/cyclecloud-job-submit.installed
 
 rm -rf /tmp/slurm*.rpm*
+
+#Install PMIx_v3
+mkdir -p /opt/pmix/v3
+cd /tmp
+wget https://github.com/openpmix/openpmix/archive/refs/tags/v3.1.6.tar.gz -O openpmix-v3.1.6.tar.gz
+tar xzf openpmix-v3.1.6.tar.gz
+cd openpmix-3.1.6/
+./autogen.sh
+./configure --prefix=/opt/pmix/v3
+make -j install >/dev/null
