@@ -9,7 +9,7 @@ export ccSlurmVer=2.6.5
 mkdir -p /opt/cycle/jetpack/system/chef/cache/jetpack/downloads
 
 # Determine OS version for pluginName
-if grep -q 'VERSION_ID="8"' /etc/os-release; then
+if grep -q 'el8' /etc/os-release; then
     pluginName="job_submit_cyclecloud_centos8_${VER}.so"
     OS=el8
 elif grep -q "ID=ubuntu" /etc/os-release; then
