@@ -2,8 +2,8 @@
 
 set -x
 
-export VER=20.11.7-1
-export ccSlurmVer=2.6.5
+export VER=20.11.9-1
+export ccSlurmVer=2.7.0
 
 # Make placeholder dir for CycleCloud
 mkdir -p /opt/cycle/jetpack/system/chef/cache/jetpack/downloads
