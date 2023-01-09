@@ -1,24 +1,31 @@
 #!/bin/bash
 
 set -x
+exec 1>/tmp/slurm_install.log 2>&1
 
-export VER=20.11.9-1
+export VER=22.05.3-1   #check available versions here:  https://github.com/Azure/cyclecloud-slurm/releases/tag/2.7.0
 export ccSlurmVer=2.7.0
 
 # Make placeholder dir for CycleCloud
 mkdir -p /opt/cycle/jetpack/system/chef/cache/jetpack/downloads
 
 # Determine OS version for pluginName
-if grep -q "el8" /etc/os-release; then
-    pluginName="job_submit_cyclecloud_centos8_${VER}.so"
-    OS=el8
-elif grep -q "ID=ubuntu" /etc/os-release; then
-    pluginName="job_submit_cyclecloud_ubuntu_${VER}.so"
-    OS=ubuntu
-    groupadd -g 64030 slurm && useradd -u 64030 -g 64030 --no-create-home slurm
+if [[ $VER == *"22.05"* ]]; then
+    echo "job_submit.lua will be installed on Scheduler node on startup"
 else
-    pluginName="job_submit_cyclecloud_centos_${VER}.so"
-    OS=el7
+    if grep -q "el8" /etc/os-release; then
+        pluginName="job_submit_cyclecloud_centos8_${VER}.so"
+        OS=el8
+    elif grep -q "ID=ubuntu" /etc/os-release; then
+        pluginName="job_submit_cyclecloud_ubuntu_${VER}.so"
+        OS=ubuntu
+        groupadd -g 64030 slurm && useradd -u 64030 -g 64030 --no-create-home slurm
+    else
+        pluginName="job_submit_cyclecloud_centos_${VER}.so"
+        OS=el7
+    fi
+    wget -O /usr/lib64/slurm/job_submit_cyclecloud.so  https://github.com/Azure/cyclecloud-slurm/releases/download/${ccSlurmVer}/${pluginName}
+    touch /etc/cyclecloud-job-submit.installed
 fi
 
 # Create slurm and munge users if needed (11100 and 11101 are CycleCloud default values for RHEL/CentOS/Alma)
@@ -74,8 +81,8 @@ for pkg in "${slurmpkgs[@]}"; do
 done
 
 # Install Job Submit Plugin for CycleCloud
-wget -O /usr/lib64/slurm/job_submit_cyclecloud.so  https://github.com/Azure/cyclecloud-slurm/releases/download/${ccSlurmVer}/${pluginName}
-touch /etc/cyclecloud-job-submit.installed
+#wget -O /usr/lib64/slurm/job_submit_cyclecloud.so  https://github.com/Azure/cyclecloud-slurm/releases/download/${ccSlurmVer}/${pluginName}
+#touch /etc/cyclecloud-job-submit.installed
 
 rm -rf /tmp/slurm*.{deb*,rpm*}
 
