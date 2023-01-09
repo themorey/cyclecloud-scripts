@@ -12,6 +12,14 @@ mkdir -p /opt/cycle/jetpack/system/chef/cache/jetpack/downloads
 # Determine OS version for pluginName
 if [[ $VER == *"22.05"* ]]; then
     echo "job_submit.lua will be installed on Scheduler node on startup"
+    if grep -q "el8" /etc/os-release; then
+        OS=el8
+    elif grep -q "ID=ubuntu" /etc/os-release; then
+        OS=ubuntu
+        groupadd -g 64030 slurm && useradd -u 64030 -g 64030 --no-create-home slurm
+    else
+        OS=el7
+    fi
 else
     if grep -q "el8" /etc/os-release; then
         pluginName="job_submit_cyclecloud_centos8_${VER}.so"
