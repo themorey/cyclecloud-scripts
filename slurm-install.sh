@@ -103,3 +103,5 @@ cd openpmix-3.1.6/
 ./autogen.sh
 ./configure --prefix=/opt/pmix/v3
 make -j install >/dev/null
+
+export PATH=$PATH:/opt/pmix/v3/bin
