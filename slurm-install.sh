@@ -47,7 +47,7 @@ fi
 
 # Install dependencies
 if [ "${OS}" == "ubuntu" ]; then
-  apt update && apt upgrade
+  apt update && apt upgrade -y
   apt autoclean
   apt install -y munge nfs-common libevent-dev
 else
