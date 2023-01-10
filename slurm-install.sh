@@ -50,6 +50,13 @@ if [ "${OS}" == "ubuntu" ]; then
   apt update && apt upgrade -y
   apt autoclean
   apt install -y munge nfs-common libevent-dev
+  #add library links
+  ln -s /lib/x86_64-linux-gnu/libreadline.so.7 /usr/lib/x86_64-linux-gnu/libreadline.so.6
+  ln -s /lib/x86_64-linux-gnu/libhistory.so.7 /usr/lib/x86_64-linux-gnu/libhistory.so.6
+  ln -s /lib/x86_64-linux-gnu/libncurses.so.5 /usr/lib/x86_64-linux-gnu/libncurses.so.5
+  ln -s /lib/x86_64-linux-gnu/libtinfo.so.5 /usr/lib/x86_64-linux-gnu/libtinfo.so.5
+  ln -s /usr/lib/x86_64-linux-gnu/libreadline.so.8 /usr/lib/x86_64-linux-gnu/libreadline.so.7
+  ln -s /usr/lib/x86_64-linux-gnu/libhistory.so.8 /usr/lib/x86_64-linux-gnu/libhistory.so.7
 else
   yum install -y epel-release
   yum install -y perl munge nfs-utils libevent-devel
