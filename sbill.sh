@@ -65,10 +65,11 @@ sbill() {
     local start=$(date +%F)
     local end=$(date +"%Y-%m-%dT%H:%M")
     # in the array add the [partion_name]=cost
-    declare -A partition=( [execute]=3.04 [midmem]=2.02 [lowmem]=0.085 )
+    declare -A partition=( [execute]=2.30 [highmem]=6.91 )
     local jobid=""
     local options=""
     local username=""
+    local account=""
     while [ -n "$1" ]; do
         case $1 in
             -S | --start) shift; start=$1;;
@@ -77,11 +78,13 @@ sbill() {
             -y | -Y | --year)  start="$(date +%Y)-01-01";;
 	        -u | --user) shift; username=$1;;
             -j | --jobid)  shift; jobid=$1;;
+            -a | --account) shift; account=$1;;
             -h | --help)
 	        echo "Display job charging / billing summary";
 		    echo " ";
 		    echo "Usage: ";
             echo "       sbill -j <jobid>        # Show a specific job cost";
+			echo "       sbill -a <account>      # Show a specific account cost";
 		    echo " ";
             echo "       sbill [-m] [-Y] [-S YYYY-MM-DD] [-E YYYT-MM-DDTHH:MM]    # Show costs for all jobs for all user";
 		    echo "		-m = From start of the current Month";
@@ -113,6 +116,27 @@ sbill() {
         else
             echo "JobID ${jobid} does not exist"
         fi
+    elif [ -n "${account}" ]; then
+        cmd="sacct -X --format=jobid,user,account,partition,AllocNodes%10,ElapsedRaw -A ${account} --starttime ${start} --endtime ${end}"
+        echo "# ${cmd}"
+        $cmd
+        echo " "
+        test=$($cmd -n -P | cut -d "|" -f1 )
+        if [ -n "${test}" ]; then
+            for i in ${!partition[@]}; do
+                local walltime=$($cmd -n -P | grep $i | awk -F '|' '{sec += $6*$5} END {print sec}')
+                if [ -n "${walltime}" ]; then
+                        local usage=$(printf "%0.2f\n" $(echo "$walltime/3600" | bc -l))
+                    local cost=$(printf "$%0.2f\n" $(echo "$usage*${partition[$i]}" | bc -l))
+                    echo "      $i usage:       $usage VMU ($i estimated  price:        $cost)"
+                else
+                    echo "      $i usage:       0.00 VMU ($i estimated  price:  \$0.00)"
+                    continue
+                fi
+            done
+        else
+            echo "No jobs during this timeframe:  ${start} - ${end}"
+        fi
     elif [ -n "${username}" ]; then
         cmd="sacct -X --format=jobid,user,partition,AllocNodes%10,ElapsedRaw -u ${username} --starttime ${start} --endtime ${end}"
         echo "# ${cmd}"
@@ -135,14 +159,14 @@ sbill() {
             echo "No jobs during this timeframe:  ${start} - ${end}"
         fi
     else
-        cmd="sacct -X --format=jobid,user,partition,AllocNodes%10,ElapsedRaw -a --starttime ${start} --endtime ${end}"
+        cmd="sacct -X --format=jobid,user,account,partition,AllocNodes%10,ElapsedRaw -a --starttime ${start} --endtime ${end}"
         echo "# ${cmd}"
         $cmd
         echo " "
         test=$($cmd -n -P | cut -d "|" -f1 )
         if [ -n "${test}" ]; then
       	    for i in ${!partition[@]}; do
-                local walltime=$($cmd -n -P | grep $i | awk -F '|' '{sec += $5*$4} END {print sec}')
+                local walltime=$($cmd -n -P | grep $i | awk -F '|' '{sec += $6*$5} END {print sec}')
                 if [ -n "${walltime}" ]; then
                     local usage=$(printf "%0.2f\n" $(echo "$walltime/3600" | bc -l))
                     local cost=$(printf "$%0.2f\n" $(echo "$usage*${partition[$i]}" | bc -l))
