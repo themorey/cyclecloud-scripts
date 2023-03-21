@@ -20,6 +20,8 @@ if [[ $VER == *"22.05"* ]]; then
     else
         OS=el7
     fi
+elif [[ ${ccSlurmVer} == "2.7."* ]]; then
+    echo "Lua plugin to be installed by CC at boot"
 else
     if grep -q "el8" /etc/os-release; then
         pluginName="job_submit_cyclecloud_centos8_${VER}.so"
@@ -70,7 +72,11 @@ fi
 
 # Create a declarative array to index the slurm rpms
 declare -a slurmrpms
-slurmpkgs=( "slurm" "slurm-devel" "slurm-example-configs" "slurm-slurmctld" "slurm-slurmd" "slurm-perlapi" "slurm-torque" "slurm-openlava" "slurm-libpmi" )
+if [ "${OS}" == "ubuntu" ]; then
+    slurmpkgs=( "slurm" "slurm-devel" "slurm-example-configs" "slurm-slurmctld" "slurm-slurmd" "slurm-torque" "slurm-openlava" "slurm-libpmi" )
+else
+    slurmpkgs=( "slurm" "slurm-devel" "slurm-example-configs" "slurm-slurmctld" "slurm-slurmd" "slurm-torque" "slurm-openlava" "slurm-libpmi" "slurm-perlapi" "slurm-contribs" )
+fi
 
 # Loop through the RPMs in the array to download and install each
 for pkg in "${slurmpkgs[@]}"; do
