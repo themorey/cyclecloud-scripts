@@ -2,7 +2,7 @@
 
 set -x
 
-logdir="/sched/log"
+logdir="/sched/$(sudo -i jetpack config cyclecloud.cluster.name)/log"
 logfile=$logdir/slurm_prolog.log
 exec 1>$logfile 2>&1
 
