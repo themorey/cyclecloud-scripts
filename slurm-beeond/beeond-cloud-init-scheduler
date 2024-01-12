@@ -1,0 +1,44 @@
+#!/bin/bash
+set -x
+exec 1>/var/log/beeond-config.log 2>&1
+
+systemctl enable --now atd.service
+cat << EOF>>/tmp/beeond-config.sh
+#!/bin/bash
+set -x
+while [ ! -d /etc/slurm/slurm.conf ]; do
+  sleep 30
+done
+
+# Download Prolog/Epilog scripts to /sched/$(sudo -i jetpack config cyclecloud.cluster.name)
+sudo wget -O /sched/$(sudo -i jetpack config cyclecloud.cluster.name)/slurm_prolog.sh https://raw.githubusercontent.com/themorey/cyclecloud-scripts/main/slurm-beeond/slurm-prolog-beeond.sh
+sudo wget -O /sched/$(sudo -i jetpack config cyclecloud.cluster.name)/slurm_epilog.sh https://raw.githubusercontent.com/themorey/cyclecloud-scripts/main/slurm-beeond/slurm-epilog-beeond.sh
+
+# update prolog & epilog scripts log dir path
+sudo sed -i "s/\/sched/\/sched\/$(sudo -i jetpack config cyclecloud.cluster.name)/g" /sched/$(sudo -i jetpack config cyclecloud.cluster.name)/{slurm_prolog.sh,slurm_epilog.sh}
+
+#  Make the scripts executable
+sudo chmod +x /sched/$(sudo -i jetpack config cyclecloud.cluster.name)/slurm_*log.sh
+
+# Add the logs directory if it doesn't exist
+[ -d /sched/$(sudo -i jetpack config cyclecloud.cluster.name)/log ] || sudo mkdir /sched/$(sudo -i jetpack config cyclecloud.cluster.name)/log
+
+# add Prolog/Epilog configs to slurm.conf
+sudo bash -c "cat <<EOH >>/sched/$(sudo -i jetpack config cyclecloud.cluster.name)/slurm.conf
+
+Prolog=/sched/$(sudo -i jetpack config cyclecloud.cluster.name)/slurm_prolog.sh
+Epilog=/sched/$(sudo -i jetpack config cyclecloud.cluster.name)/slurm_epilog.sh
+
+EOH"
+  
+# force cluster nodes to re-read the slurm.conf
+sudo scontrol reconfig
+
+EOF
+
+# create the BeeOND connection auth file...link created in prolog file
+sudo dd if=/dev/random of=/sched/$(sudo -i jetpack config cyclecloud.cluster.name)/beeond-connauthfile bs=128 count=1
+sudo chmod 400 /sched/$(sudo -i jetpack config cyclecloud.cluster.name)/beeond-connauthfile
+
+# schedule the beeond-config.sh script to run in 1 minute
+at now + 1 minute -f /tmp/beeond-config.sh
