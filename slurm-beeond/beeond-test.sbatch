@@ -4,7 +4,7 @@
 #SBATCH -n 100
 #SBATCH -p hpc
 
-logdir="/sched/log"
+logdir="/sched/$(sudo -i jetpack config cyclecloud.cluster.name)/log"
 logfile=$logdir/slurm_beeond.log
 
 #echo "$DATE creating Slurm Job $SLURM_JOB_ID nodefile and starting Beeond" >> $logfile 2>&1
