@@ -5,7 +5,7 @@ if [ "$(/opt/cycle/jetpack/bin/jetpack slurm.hpc)" == "True" ]; then
   nodefile=/shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   if [ -e $nodefile ] ; then
 
-    logdir="/sched/log"
+    logdir="/sched/$(sudo -i jetpack config cyclecloud.cluster.name)/log"
     logfile=$logdir/slurm_epilog.log
     exec 1>$logfile 2>&1
 
