@@ -1,6 +1,8 @@
 #!/bin/bash
-
 set -x
+
+CLUSTER=$(sudo -i jetpack config cyclecloud.cluster.name)
+
 logdir="/sched/$CLUSTER/log"
 logfile=$logdir/slurm_prolog.log
 exec 1>$logfile 2>&1
