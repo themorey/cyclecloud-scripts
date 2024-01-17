@@ -32,7 +32,11 @@ if [ "$(/opt/cycle/jetpack/bin/jetpack config slurm.hpc)" == "True" ]; then
   # Stop any running BeeOND instances and delete data
    sudo -u $SLURM_JOB_USER beeond stop -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID -L -d
   # Start Beeond as $SLURM_JOB_USER
-  sudo -u $SLURM_JOB_USER beeond start -P -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/nvme -c /mnt/beeond -f /etc/beegfs
+  if (( $SLURM_JOB_NUM_NODES > 1 )); then
+    sudo -u $SLURM_JOB_USER beeond start -P -m 2 -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/nvme -c /mnt/beeond -f /etc/beegfs
+  else
+    sudo -u $SLURM_JOB_USER beeond start -P -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/nvme -c /mnt/beeond -f /etc/beegfs
+  fi
 #else
 #  echo "Skipping Beeond start since this is not an HPC partition..."
 fi
