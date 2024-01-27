@@ -946,7 +946,7 @@ mkdir -p ${MOUNTPOINT} && sudo mount -t beegfs beegfs_ondemand ${MOUNTPOINT} \${
       execute_pdsh_cmd "${HOSTS}" "echo %h,${HELPERD_BIN},-,${LOGFILE},${PIDFILE} >> ${STATUSFILE}" "false"
       execute_pdsh_cmd "${HOSTS}" "echo %h,${CLIENT_BIN},${MOUNTPOINT},${LOGFILE},- >> ${STATUSFILE}" "false"
 
-      execute_pdsh_cmd "${HOSTS}" "${MODPROBE_CMD} || ${REBUILD_CMD}" "false"
+#      execute_pdsh_cmd "${HOSTS}" "${MODPROBE_CMD} || ${REBUILD_CMD}" "false"
       execute_pdsh_cmd "${HOSTS}" "${MOUNT_CMD}" "false"
 
       if [ "${PREFER_LOCAL}" = "true" ] #set target count to 1
