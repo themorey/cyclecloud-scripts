@@ -1129,12 +1129,12 @@ wait_online_good()
    local NUM_NODES=$2
 
    #first, wait for the correct number of *nodes* to become available.
-   local CTLCMD="${CTL_BIN} --sysMgmtdHost=${MGMTD} --connPortShift=${PORT_SHIFT} \
-         --listnodes --nodetype=${NODE_TYPE}"
-   while [ ! "$(${CTLCMD} | wc -l)" = "${NUM_NODES}" ]
-   do
-      sleep 1
-   done
+#   local CTLCMD="${CTL_BIN} --sysMgmtdHost=${MGMTD} --connPortShift=${PORT_SHIFT} \
+#         --listnodes --nodetype=${NODE_TYPE}"
+#   while [ ! "$(${CTLCMD} | wc -l)" = "${NUM_NODES}" ]
+#   do
+#      sleep 1
+#   done
 
    # now wait for all *targets* to become online/good. (also works for metadata servers, since they
    # are internally treated as one target per server)
