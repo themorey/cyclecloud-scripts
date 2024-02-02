@@ -15,7 +15,7 @@ done
 CLUSTER=\$(sudo -i jetpack config cyclecloud.cluster.name)
 
 # Download Prolog/Epilog scripts to /sched/$(sudo -i jetpack config cyclecloud.cluster.name)
-sudo wget -O /sched/\$CLUSTER/slurm_prolog.sh https:https://raw.githubusercontent.com/themorey/cyclecloud-scripts/main/cyclecloud-cmaq-beeond/slurm_prolog.sh
+sudo wget -O /sched/\$CLUSTER/slurm_prolog.sh https://raw.githubusercontent.com/themorey/cyclecloud-scripts/main/cyclecloud-cmaq-beeond/slurm_prolog.sh
 sudo wget -O /sched/\$CLUSTER/slurm_epilog.sh https://raw.githubusercontent.com/themorey/cyclecloud-scripts/main/cyclecloud-cmaq-beeond/slurm_epilog.sh
 
 #  Make the scripts executable
