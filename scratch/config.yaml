@@ -1,0 +1,26 @@
+logging:
+  type: syslog
+  level: log_debug
+components:
+  - libfuse
+  - block_cache
+  - attr_cache
+  - azstorage
+libfuse:
+  attribute-expiration-sec: 120
+  entry-expiration-sec: 120
+  negative-entry-expiration-sec: 240
+file_cache:
+  path: /tmp
+  block_cache:
+  block-size-mb: 32
+  mem-size-mb: 4096
+  prefetch: 80
+attr_cache:
+  timeout-sec: 7200
+azstorage:
+  type: block
+  account-name: $AZURE_STORAGE_ACCOUNT
+  account-key: $AZURE_STORAGE_ACCESS_KEY
+  mode: key
+  container: $AZURE_STORAGE_ACCOUNT_CONTAINER
