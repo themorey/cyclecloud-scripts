@@ -24,6 +24,7 @@ for user in "${!userkeys[@]}"; do
    cat <<EOF >>$file
 AdType = "AuthenticatedUser"
 Name = "${user}"
+###  If using CycleCloud internal user database for auth, uncomment line 28 and comment out line 29
 #Authentication = "internal"
 Authentication = "active_directory"
 Roles = {"User"}
